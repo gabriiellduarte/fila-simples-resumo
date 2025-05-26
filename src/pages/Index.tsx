@@ -54,6 +54,11 @@ const Index = () => {
     refetchAppointments();
   };
 
+  const handleProcedureChange = (procedure: string) => {
+    setSelectedProcedure(procedure);
+    // A paginação será resetada automaticamente através do hook usePagination
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -103,7 +108,7 @@ const Index = () => {
                 <ProcedureFilter
                   procedures={procedures}
                   selectedProcedure={selectedProcedure}
-                  onProcedureChange={setSelectedProcedure}
+                  onProcedureChange={handleProcedureChange}
                   isLoading={proceduresLoading}
                 />
               </CardContent>
@@ -148,7 +153,7 @@ const Index = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setSelectedProcedure('all')}
+                    onClick={() => handleProcedureChange('all')}
                     className="w-fit text-blue-600 hover:text-blue-800"
                   >
                     Limpar filtro
