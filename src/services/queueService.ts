@@ -1,97 +1,78 @@
 
-import { Appointment, ProcedureSummary } from '../types/queue';
+import { Appointment, ProcedureSummary, APIPatient } from '../types/queue';
+import { API_CONFIG } from '../config/api';
 
-// Dados simulados - substitua por chamadas reais da API
-const mockAppointments: Appointment[] = [
-  {
-    id: '1',
-    patientName: 'Maria Silva',
-    cns: '123456789012345',
-    procedure: 'Consulta Cardiologia',
-    arrivalTime: '08:30',
-    priority: 'normal',
+// Função para converter dados da API para o formato da aplicação
+const convertAPIDataToAppointment = (apiData: APIPatient, index: number): Appointment => {
+  return {
+    id: apiData.SRG_PACIENTE_ID.toString(),
+    patientName: apiData.SRG_PACIENTE_NOME,
+    cns: apiData.SRG_PACIENTE_CNS,
+    procedure: 'Consulta Médica', // Como não há procedimento na API, usar um padrão
+    arrivalTime: new Date().toLocaleTimeString('pt-BR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }),
+    priority: 'normal' as const,
     estimatedTime: 30,
-    status: 'waiting'
-  },
-  {
-    id: '2',
-    patientName: 'João Santos',
-    cns: '234567890123456',
-    procedure: 'Exame de Sangue',
-    arrivalTime: '09:15',
-    priority: 'urgent',
-    estimatedTime: 15,
-    status: 'waiting'
-  },
-  {
-    id: '3',
-    patientName: 'Ana Costa',
-    cns: '345678901234567',
-    procedure: 'Ultrassonografia',
-    arrivalTime: '09:45',
-    priority: 'normal',
-    estimatedTime: 20,
-    status: 'waiting'
-  },
-  {
-    id: '4',
-    patientName: 'Pedro Lima',
-    cns: '456789012345678',
-    procedure: 'Consulta Cardiologia',
-    arrivalTime: '10:00',
-    priority: 'emergency',
-    estimatedTime: 45,
-    status: 'waiting'
-  },
-  {
-    id: '5',
-    patientName: 'Carla Oliveira',
-    cns: '567890123456789',
-    procedure: 'Raio-X',
-    arrivalTime: '10:30',
-    priority: 'normal',
-    estimatedTime: 10,
-    status: 'waiting'
-  },
-  {
-    id: '6',
-    patientName: 'Roberto Mendes',
-    cns: '678901234567890',
-    procedure: 'Exame de Sangue',
-    arrivalTime: '11:00',
-    priority: 'normal',
-    estimatedTime: 15,
-    status: 'waiting'
-  }
-];
+    status: 'waiting' as const
+  };
+};
 
 export const queueService = {
-  // Simula uma chamada à API para buscar atendimentos
+  // Busca atendimentos da API real
   async getAppointments(): Promise<Appointment[]> {
-    // Simula delay da API
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return mockAppointments.filter(apt => apt.status === 'waiting');
+    try {
+      const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.appointments}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const apiData: APIPatient[] = await response.json();
+      console.log('API Response:', apiData);
+      
+      // Converter dados da API para o formato da aplicação
+      const appointments = apiData.map((patient, index) => 
+        convertAPIDataToAppointment(patient, index)
+      );
+      
+      return appointments.filter(apt => apt.status === 'waiting');
+    } catch (error) {
+      console.error('Erro ao buscar atendimentos:', error);
+      // Retorna array vazio em caso de erro
+      return [];
+    }
   },
 
-  // Simula uma chamada à API para buscar procedimentos únicos
+  // Busca procedimentos únicos dos dados da API
   async getProcedures(): Promise<string[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    const procedures = [...new Set(mockAppointments.map(apt => apt.procedure))];
-    return procedures.sort();
+    try {
+      const appointments = await this.getAppointments();
+      const procedures = [...new Set(appointments.map(apt => apt.procedure))];
+      return procedures.sort();
+    } catch (error) {
+      console.error('Erro ao buscar procedimentos:', error);
+      return [];
+    }
   },
 
   // Gera resumo por procedimento
   async getProcedureSummary(): Promise<ProcedureSummary[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    const waitingAppointments = mockAppointments.filter(apt => apt.status === 'waiting');
-    const summary = waitingAppointments.reduce((acc: Record<string, number>, apt) => {
-      acc[apt.procedure] = (acc[apt.procedure] || 0) + 1;
-      return acc;
-    }, {});
+    try {
+      const appointments = await this.getAppointments();
+      const summary = appointments.reduce((acc: Record<string, number>, apt) => {
+        acc[apt.procedure] = (acc[apt.procedure] || 0) + 1;
+        return acc;
+      }, {});
 
-    return Object.entries(summary).map(([procedure, count]) => ({
-      procedure,
-      count
-    })).sort((a, b) => b.count - a.count);
+      return Object.entries(summary).map(([procedure, count]) => ({
+        procedure,
+        count
+      })).sort((a, b) => b.count - a.count);
+    } catch (error) {
+      console.error('Erro ao gerar resumo:', error);
+      return [];
+    }
   }
 };
