@@ -24,7 +24,7 @@ const ProcedureFilter: React.FC<ProcedureFilterProps> = ({
           <SelectValue placeholder="Filtrar por procedimento" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">Todos os procedimentos</SelectItem>
+          <SelectItem value="all">Todos os procedimentos</SelectItem>
           {procedures.map((procedure) => (
             <SelectItem key={procedure} value={procedure}>
               {procedure}

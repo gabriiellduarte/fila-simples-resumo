@@ -11,7 +11,7 @@ import SummaryModal from '../components/SummaryModal';
 import { Appointment, ProcedureSummary } from '../types/queue';
 
 const Index = () => {
-  const [selectedProcedure, setSelectedProcedure] = useState('');
+  const [selectedProcedure, setSelectedProcedure] = useState('all');
   const [showSummary, setShowSummary] = useState(false);
   const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
 
@@ -41,7 +41,7 @@ const Index = () => {
 
   // Filtra atendimentos quando procedure selecionado muda
   useEffect(() => {
-    if (selectedProcedure) {
+    if (selectedProcedure && selectedProcedure !== 'all') {
       setFilteredAppointments(
         appointments.filter(apt => apt.procedure === selectedProcedure)
       );
@@ -119,11 +119,11 @@ const Index = () => {
                     {filteredAppointments.length}
                   </div>
                   <div className="text-sm text-gray-500">
-                    {selectedProcedure ? 'Filtrados' : 'Total na fila'}
+                    {selectedProcedure !== 'all' ? 'Filtrados' : 'Total na fila'}
                   </div>
                 </div>
                 
-                {selectedProcedure && (
+                {selectedProcedure !== 'all' && (
                   <div className="text-center pt-4 border-t">
                     <div className="text-xl font-semibold text-gray-700">
                       {appointments.length}
@@ -142,13 +142,13 @@ const Index = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">
-                  {selectedProcedure ? `${selectedProcedure}` : 'Todos os Atendimentos'}
+                  {selectedProcedure !== 'all' ? `${selectedProcedure}` : 'Todos os Atendimentos'}
                 </CardTitle>
-                {selectedProcedure && (
+                {selectedProcedure !== 'all' && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setSelectedProcedure('')}
+                    onClick={() => setSelectedProcedure('all')}
                     className="w-fit text-blue-600 hover:text-blue-800"
                   >
                     Limpar filtro
