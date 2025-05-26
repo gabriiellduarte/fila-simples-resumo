@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,6 +14,7 @@ import {
 } from '@/components/ui/pagination';
 import { Appointment } from '../types/queue';
 import { usePagination } from '../hooks/usePagination';
+import { Button } from '@/components/ui/button';
 
 interface QueueListProps {
   appointments: Appointment[];
@@ -144,7 +144,7 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
               <TableRow>
                 <TableHead className="w-20 text-center">Posição</TableHead>
                 <TableHead>Nome</TableHead>
-                <TableHead>CNS</TableHead>
+                <TableHead>Protocolo</TableHead>
                 <TableHead>Procedimento</TableHead>
                 <TableHead className="w-32">Prioridade</TableHead>
               </TableRow>
@@ -169,30 +169,63 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
       </Card>
 
       {totalPages > 1 && (
-        <div className="flex flex-col items-center gap-4">
-          <div className="text-sm text-gray-600">
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-sm text-gray-500">
             Mostrando {((currentPage - 1) * 10) + 1} a {Math.min(currentPage * 10, totalItems)} de {totalItems} atendimentos
           </div>
-          
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  onClick={goToPreviousPage}
-                  className={hasPreviousPage ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}
-                />
-              </PaginationItem>
-              
-              {renderPaginationItems()}
-              
-              <PaginationItem>
-                <PaginationNext 
-                  onClick={goToNextPage}
-                  className={hasNextPage ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPreviousPage()}
+              disabled={!hasPreviousPage}
+            >
+              Anterior
+            </Button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(page => {
+                  if (totalPages <= 5) return true;
+                  if (page === 1 || page === totalPages) return true;
+                  if (page >= currentPage - 1 && page <= currentPage + 1) return true;
+                  return false;
+                })
+                .map((page, index, array) => {
+                  if (index > 0 && array[index - 1] !== page - 1) {
+                    return (
+                      <React.Fragment key={`ellipsis-${page}`}>
+                        <span className="px-2">...</span>
+                        <Button
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => goToPage(page)}
+                        >
+                          {page}
+                        </Button>
+                      </React.Fragment>
+                    );
+                  }
+                  return (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => goToPage(page)}
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToNextPage()}
+              disabled={!hasNextPage}
+            >
+              Próximo
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -1,8 +1,9 @@
 
 export interface APIPatient {
-  SRG_PACIENTE_ID: number;
+  SRG_ATE_PROTOCOLO: number;
   SRG_PACIENTE_NOME: string;
   SRG_PACIENTE_CNS: string;
+  SRG_G_PROCEDIMENTO_NOME: string;
   SRG_PACIENTE_NASCIMENTO: string;
   SRG_PACIENTE_TELEFONE_1: string;
   SRG_PACIENTE_TELEFONE_2: string;
@@ -15,9 +16,9 @@ export interface APIPatient {
 }
 
 export interface Appointment {
-  id: string;
+  id: number;
   patientName: string;
-  cns: string;
+  cns: number;
   procedure: string;
   arrivalTime: string;
   priority: 'normal' | 'urgent' | 'emergency';

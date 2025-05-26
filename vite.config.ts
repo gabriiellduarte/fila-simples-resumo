@@ -8,7 +8,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: ['ti.aracati.ce.gov.br']
   },
+  
   plugins: [
     react(),
     mode === 'development' &&

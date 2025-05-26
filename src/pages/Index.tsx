@@ -1,18 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RefreshCw, BarChart3, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { queueService } from '../services/queueService';
 import QueueList from '../components/QueueList';
 import ProcedureFilter from '../components/ProcedureFilter';
-import SummaryModal from '../components/SummaryModal';
-import { Appointment, ProcedureSummary } from '../types/queue';
+import { Appointment } from '../types/queue';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [selectedProcedure, setSelectedProcedure] = useState('all');
-  const [showSummary, setShowSummary] = useState(false);
   const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
 
   // Query para buscar atendimentos
@@ -32,13 +31,6 @@ const Index = () => {
     queryFn: queueService.getProcedures,
   });
 
-  // Query para buscar resumo (só quando modal estiver aberto)
-  const { data: summary = [], isLoading: summaryLoading } = useQuery({
-    queryKey: ['summary'],
-    queryFn: queueService.getProcedureSummary,
-    enabled: showSummary,
-  });
-
   // Filtra atendimentos quando procedure selecionado muda
   useEffect(() => {
     if (selectedProcedure && selectedProcedure !== 'all') {
@@ -56,25 +48,28 @@ const Index = () => {
 
   const handleProcedureChange = (procedure: string) => {
     setSelectedProcedure(procedure);
-    // A paginação será resetada automaticamente através do hook usePagination
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-orange-500 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">
+              <Clock className="h-8 w-8 text-orange-500" />
+              <img 
+                src="https://aracati.ce.gov.br/imagens/logovazada.png" 
+                alt="Ícone de Fila" 
+                className="h-10 w-auto"
+              />
+              <h1 className="text-2xl font-bold text-white hidden sm:block">
                 Fila de Atendimento
               </h1>
             </div>
             
             <div className="flex items-center gap-3">
               <Button
-                variant="outline"
                 size="sm"
                 onClick={handleRefresh}
                 disabled={appointmentsLoading}
@@ -84,8 +79,9 @@ const Index = () => {
               </Button>
               
               <Button
-                onClick={() => setShowSummary(true)}
-                className="bg-blue-600 hover:bg-blue-700"
+                variant="outline"
+                onClick={() => navigate('/resumo')}
+                className="hover:text-orange-700"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Resumo
@@ -120,7 +116,7 @@ const Index = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-orange-600">
                     {filteredAppointments.length}
                   </div>
                   <div className="text-sm text-gray-500">
@@ -154,7 +150,7 @@ const Index = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleProcedureChange('all')}
-                    className="w-fit text-blue-600 hover:text-blue-800"
+                    className="w-fit text-orange-600 hover:text-orange-800"
                   >
                     Limpar filtro
                   </Button>
@@ -170,14 +166,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal de Resumo */}
-      <SummaryModal
-        isOpen={showSummary}
-        onClose={() => setShowSummary(false)}
-        summary={summary}
-        isLoading={summaryLoading}
-      />
     </div>
   );
 };
