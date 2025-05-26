@@ -2,6 +2,7 @@
 export interface Appointment {
   id: string;
   patientName: string;
+  cns: string; // Cartão Nacional de Saúde
   procedure: string;
   arrivalTime: string;
   priority: 'normal' | 'urgent' | 'emergency';
