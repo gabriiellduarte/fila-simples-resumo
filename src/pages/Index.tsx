@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RefreshCw, BarChart3, Clock } from 'lucide-react';
+import { RefreshCw, BarChart3, Clock, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { queueService } from '../services/queueService';
 import QueueList from '../components/QueueList';
@@ -22,7 +23,7 @@ const Index = () => {
   } = useQuery({
     queryKey: ['appointments'],
     queryFn: queueService.getAppointments,
-    refetchInterval: 30000, // Atualiza a cada 30 segundos
+    refetchInterval: 30000,
   });
 
   // Query para buscar procedimentos
@@ -136,13 +137,43 @@ const Index = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Card de Regras de Prioridade */}
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2 text-blue-800">
+                  <Info className="h-5 w-5" />
+                  Regras de Prioridade
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="bg-white rounded-lg p-3 border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      1
+                    </div>
+                    <span className="font-semibold text-blue-800">Status de Prioridade</span>
+                  </div>
+                  <p className="text-sm text-gray-600 ml-8">Peso 1 - Pacientes com prioridade urgente são atendidos primeiro</p>
+                </div>
+                
+                <div className="bg-white rounded-lg p-3 border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      2
+                    </div>
+                    <span className="font-semibold text-blue-800">Data de Solicitação</span>
+                  </div>
+                  <p className="text-sm text-gray-600 ml-8">Peso 2 - Ordem cronológica das solicitações médicas</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Main Content - Lista de Atendimentos */}
           <div className="lg:col-span-3">
             <Card>
               <CardHeader>
-                <h6>Regras de prioridade da fila: <br/>Status de prioridade peso 1<br/>Data de solitação do médico peso 2</h6>
                 <CardTitle className="text-xl">
                   {selectedProcedure !== 'all' ? `${selectedProcedure}` : 'Todos os Atendimentos'}
                 </CardTitle>

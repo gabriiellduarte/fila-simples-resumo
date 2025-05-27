@@ -1,10 +1,11 @@
+
 import { Appointment, ProcedureSummary, APIPatient } from '../types/queue';
 import { API_CONFIG } from '../config/api';
 
 // Função para formatar o nome do paciente
 const formatPatientName = (fullName: string): string => {
   const names = fullName.split(' ');
-  if (names.length <= 2) return fullName; // Se tiver apenas um ou dois nomes, retorna completo
+  if (names.length <= 2) return fullName;
   
   const firstName = names[0];
   const lastNames = names.slice(1).map(name => `${name[0]}.`);
@@ -41,14 +42,13 @@ export const queueService = {
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-      }else{
-        console.log("resposta ok")
+      } else {
+        console.log("resposta ok");
       }
       
       const apiData: APIPatient[] = await response.json();
       console.log('API Response:', apiData);
       
-      // Converter dados da API para o formato da aplicação
       const appointments = apiData.map((patient, index) => 
         convertAPIDataToAppointment(patient, index)
       );
@@ -56,7 +56,6 @@ export const queueService = {
       return appointments;
     } catch (error) {
       console.error('Erro ao buscar atendimentos:', error);
-      // Retorna array vazio em caso de erro
       return [];
     }
   },
@@ -65,10 +64,8 @@ export const queueService = {
   async getProcedures(): Promise<string[]> {
     try {
       const appointments = await queueService.getAppointments();
-      //console.log("Appointments:", appointments);
       
-      const procedures = [...new Set(appointments.map(apt => apt.procedure))];
-      //console.log("Procedimentos únicos:", procedures);
+      const procedures: string[] = [...new Set(appointments.map(apt => apt.procedure))];
       
       return procedures.sort();
     } catch (error) {
@@ -88,7 +85,7 @@ export const queueService = {
 
       return Object.entries(summary).map(([procedure, count]) => ({
         procedure,
-        count
+        count: count as number
       })).sort((a, b) => b.count - a.count);
     } catch (error) {
       console.error('Erro ao gerar resumo:', error);
