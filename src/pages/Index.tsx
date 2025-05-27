@@ -142,9 +142,11 @@ const Index = () => {
           <div className="lg:col-span-3">
             <Card>
               <CardHeader>
+                <h6>Regras de prioridade da fila: <br/>Status de prioridade peso 1<br/>Data de solitação do médico peso 2</h6>
                 <CardTitle className="text-xl">
                   {selectedProcedure !== 'all' ? `${selectedProcedure}` : 'Todos os Atendimentos'}
                 </CardTitle>
+                
                 {selectedProcedure !== 'all' && (
                   <Button
                     variant="ghost"

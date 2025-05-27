@@ -37,17 +37,15 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
     itemsPerPage: 10
   });
 
-  const getPriorityBadge = (priority: string) => {
+  const getPriorityBadge = (priority: number) => {
     const variants = {
-      emergency: 'destructive',
-      urgent: 'secondary',
-      normal: 'outline'
+      2: 'secondary',
+      1: 'outline'
     } as const;
 
     const labels = {
-      emergency: 'Emergência',
-      urgent: 'Urgente',
-      normal: 'Normal'
+      2: 'Urgente',
+      1: 'Normal'
     };
 
     return (
@@ -145,6 +143,7 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
                 <TableHead className="w-20 text-center">Posição</TableHead>
                 <TableHead>Nome</TableHead>
                 <TableHead>Protocolo</TableHead>
+                <TableHead>Data de cadastro</TableHead>
                 <TableHead>Procedimento</TableHead>
                 <TableHead className="w-32">Prioridade</TableHead>
               </TableRow>
@@ -154,11 +153,12 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
                 <TableRow key={appointment.id} className="hover:bg-muted/50">
                   <TableCell className="text-center font-semibold">
                     <span className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full text-sm mx-auto">
-                      {getPositionNumber(index)}
+                      {appointment.posicao}
                     </span>
                   </TableCell>
                   <TableCell className="font-medium">{appointment.patientName}</TableCell>
                   <TableCell className="font-mono text-sm">{appointment.cns}</TableCell>
+                  <TableCell className="font-mono text-sm">{appointment.criadoem}</TableCell>
                   <TableCell>{appointment.procedure}</TableCell>
                   <TableCell>{getPriorityBadge(appointment.priority)}</TableCell>
                 </TableRow>

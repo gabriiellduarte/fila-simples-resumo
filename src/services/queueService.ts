@@ -19,11 +19,15 @@ const convertAPIDataToAppointment = (apiData: APIPatient, index: number): Appoin
     patientName: formatPatientName(apiData.SRG_PACIENTE_NOME),
     cns: apiData.SRG_ATE_PROTOCOLO,
     procedure: apiData.SRG_G_PROCEDIMENTO_NOME,
-    arrivalTime: new Date().toLocaleTimeString('pt-BR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    posicao: apiData.SRG_ATE_POS_ATUAL,
+    criadoem: new Date(apiData.SRG_ATE_CRIADOEM).toLocaleTimeString('pt-BR', { 
+      day: '2-digit', 
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     }),
-    priority: 'normal' as const,
+    priority: apiData.SRG_AGE_PRIORIDADE,
     estimatedTime: 30,
     status: 'waiting' as const
   };
