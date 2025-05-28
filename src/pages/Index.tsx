@@ -13,6 +13,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [selectedProcedure, setSelectedProcedure] = useState('all');
   const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
+  const [lastUpdate, setLastUpdate] = useState<string>('');
 
   // Query para buscar atendimentos
   const { 
@@ -42,6 +43,13 @@ const Index = () => {
     }
   }, [appointments, selectedProcedure]);
 
+  // Atualiza o timestamp quando os dados são atualizados
+  useEffect(() => {
+    if (appointments.length > 0) {
+      setLastUpdate(new Date().toLocaleTimeString('pt-BR'));
+    }
+  }, [appointments]);
+
   const handleRefresh = () => {
     refetchAppointments();
   };
@@ -64,19 +72,22 @@ const Index = () => {
                 className="h-10 w-auto"
               />
               <h1 className="text-2xl font-bold text-white hidden sm:block">
-                Fila de Atendimento
+                Regulação Municipal
               </h1>
             </div>
             
             <div className="flex items-center gap-3">
-              <Button
-                size="sm"
-                onClick={handleRefresh}
-                disabled={appointmentsLoading}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${appointmentsLoading ? 'animate-spin' : ''}`} />
-                Atualizar
-              </Button>
+              <div className="flex flex-col items-end">
+                <Button
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={appointmentsLoading}
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${appointmentsLoading ? 'animate-spin' : ''}`} />
+                  Atualizar
+                </Button>
+                
+              </div>
               
               <Button
                 variant="outline"
@@ -95,11 +106,6 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Central de Regulação - Informações principais */}
         <Card className="border-green-200 bg-green-50 mb-6">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-xl text-green-800 text-center">
-              CENTRAL DE REGULAÇÃO MUNICIPAL
-            </CardTitle>
-          </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Horário de Funcionamento */}
@@ -251,8 +257,13 @@ const Index = () => {
           <div className="lg:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">
+                <CardTitle className="text-xl flex flex-col gap-1">
                   {selectedProcedure !== 'all' ? `${selectedProcedure}` : 'Todos os Atendimentos'}
+                  {lastUpdate && (
+                  <span className="text-xs text-gray-400 mt-1 font-normal">
+                    Última atualização: {lastUpdate}
+                  </span>
+                  )}
                 </CardTitle>
                 
                 {selectedProcedure !== 'all' && (
