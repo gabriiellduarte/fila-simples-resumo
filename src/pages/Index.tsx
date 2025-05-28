@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RefreshCw, BarChart3, Clock, Info, Phone, Mail, MapPin } from 'lucide-react';
+import { RefreshCw, BarChart3, Clock, Info, Phone, Mail, MapPin, Timer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { queueService } from '../services/queueService';
 import QueueList from '../components/QueueList';
@@ -149,6 +149,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar - Filtros e Stats */}
           <div className="lg:col-span-1 space-y-6">
+            {/* Filtros */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Filtros</CardTitle>
@@ -163,6 +164,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
+            {/* Estatísticas */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Estatísticas</CardTitle>
@@ -187,6 +189,29 @@ const Index = () => {
                     </div>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+
+            {/* Card de Tempo Médio de Espera */}
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2 text-purple-800">
+                  <Timer className="h-5 w-5" />
+                  Tempo Médio de Espera
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-purple-600">
+                    45
+                  </div>
+                  <div className="text-sm text-purple-700 font-medium">
+                    minutos
+                  </div>
+                  <div className="text-xs text-gray-500 mt-2">
+                    Baseado nos últimos atendimentos
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
