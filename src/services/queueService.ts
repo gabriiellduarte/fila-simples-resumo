@@ -30,7 +30,16 @@ const convertAPIDataToAppointment = (apiData: APIPatient, index: number): Appoin
     }),
     priority: apiData.SRG_AGE_PRIORIDADE,
     estimatedTime: 30,
-    status: 'waiting' as const
+    status: 'waiting' as const,
+    contact: {
+      phone1: apiData.SRG_PACIENTE_TELEFONE_1,
+      phone2: apiData.SRG_PACIENTE_TELEFONE_2
+    },
+    address: {
+      street: apiData.SRG_PACIENTE_ENDERECO,
+      number: apiData.SRG_PACIENTE_ENDERECO_N,
+      neighborhood: apiData.SRG_PACIENTE_BAIRRO
+    }
   };
 };
 

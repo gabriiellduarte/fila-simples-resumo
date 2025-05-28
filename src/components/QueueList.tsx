@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users } from 'lucide-react';
+import { Users, Phone, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -53,6 +53,21 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
         {labels[priority as keyof typeof labels]}
       </Badge>
     );
+  };
+
+  const formatAddress = (address: { street?: string; number?: string; neighborhood?: string }) => {
+    const parts = [];
+    if (address.street) parts.push(address.street);
+    if (address.number) parts.push(address.number);
+    if (address.neighborhood) parts.push(address.neighborhood);
+    return parts.join(', ') || 'Não informado';
+  };
+
+  const formatContact = (contact: { phone1?: string; phone2?: string }) => {
+    const phones = [];
+    if (contact.phone1) phones.push(contact.phone1);
+    if (contact.phone2) phones.push(contact.phone2);
+    return phones.join(' / ') || 'Não informado';
   };
 
   const getPositionNumber = (index: number) => {
@@ -145,6 +160,8 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
                 <TableHead>Protocolo</TableHead>
                 <TableHead>Data de cadastro</TableHead>
                 <TableHead>Procedimento</TableHead>
+                <TableHead>Contato</TableHead>
+                <TableHead>Endereço</TableHead>
                 <TableHead className="w-32">Prioridade</TableHead>
               </TableRow>
             </TableHeader>
@@ -160,6 +177,20 @@ const QueueList: React.FC<QueueListProps> = ({ appointments, isLoading }) => {
                   <TableCell className="font-mono text-sm">{appointment.cns}</TableCell>
                   <TableCell className="font-mono text-sm">{appointment.criadoem}</TableCell>
                   <TableCell>{appointment.procedure}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1 text-sm">
+                      <Phone className="h-3 w-3 text-gray-500" />
+                      <span>{formatContact(appointment.contact)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1 text-sm">
+                      <MapPin className="h-3 w-3 text-gray-500" />
+                      <span className="max-w-48 truncate" title={formatAddress(appointment.address)}>
+                        {formatAddress(appointment.address)}
+                      </span>
+                    </div>
+                  </TableCell>
                   <TableCell>{getPriorityBadge(appointment.priority)}</TableCell>
                 </TableRow>
               ))}
