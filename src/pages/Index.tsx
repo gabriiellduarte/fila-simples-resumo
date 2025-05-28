@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -94,6 +93,59 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Central de Regulação - Informações principais */}
+        <Card className="border-green-200 bg-green-50 mb-6">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl text-green-800 text-center">
+              CENTRAL DE REGULAÇÃO MUNICIPAL
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Horário de Funcionamento */}
+              <div className="bg-white rounded-lg p-4 border border-green-200">
+                <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Horário de Funcionamento
+                </h4>
+                <div className="text-sm text-gray-700 space-y-1">
+                  <p>07H30 ÀS 11H30 E 13H30 ÀS 17H30</p>
+                  <p className="font-medium">SEGUNDA A QUINTA-FEIRA</p>
+                  <p className="mt-2">08H ÀS 14HS</p>
+                  <p className="font-medium">SEXTA-FEIRA</p>
+                </div>
+              </div>
+
+              {/* Informações de Contato */}
+              <div className="bg-white rounded-lg p-4 border border-green-200">
+                <h4 className="font-semibold text-green-800 mb-3">Informações de Contato</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-green-600" />
+                    <span className="text-gray-700">(88) 99752-0033</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-green-600" />
+                    <span className="text-gray-700">regulacao@aracati.ce.gov.br</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Informações de Endereço */}
+              <div className="bg-white rounded-lg p-4 border border-green-200">
+                <h4 className="font-semibold text-green-800 mb-3">Endereço</h4>
+                <div className="flex items-start gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-700">
+                    RUA CORONEL ALEXANZITO, 657<br />
+                    CENTRO - ARACATI
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar - Filtros e Stats */}
           <div className="lg:col-span-1 space-y-6">
@@ -135,57 +187,6 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-
-            {/* Card da Central de Regulação */}
-            <Card className="border-green-200 bg-green-50">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg text-green-800 text-center">
-                  CENTRAL DE REGULAÇÃO MUNICIPAL
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Horário de Funcionamento */}
-                <div className="bg-white rounded-lg p-4 border border-green-200">
-                  <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Horário de Funcionamento
-                  </h4>
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <p>07H30 ÀS 11H30 E 13H30 ÀS 17H30</p>
-                    <p className="font-medium">SEGUNDA A QUINTA-FEIRA</p>
-                    <p className="mt-2">08H ÀS 14HS</p>
-                    <p className="font-medium">SEXTA-FEIRA</p>
-                  </div>
-                </div>
-
-                {/* Informações de Contato */}
-                <div className="bg-white rounded-lg p-4 border border-green-200">
-                  <h4 className="font-semibold text-green-800 mb-3">Informações de Contato</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-green-600" />
-                      <span className="text-gray-700">(88) 99752-0033</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Mail className="h-4 w-4 text-green-600" />
-                      <span className="text-gray-700">regulacao@aracati.ce.gov.br</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Informações de Endereço */}
-                <div className="bg-white rounded-lg p-4 border border-green-200">
-                  <h4 className="font-semibold text-green-800 mb-3">Endereço</h4>
-                  <div className="flex items-start gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">
-                      RUA CORONEL ALEXANZITO, 657<br />
-                      CENTRO - ARACATI
-                    </span>
-                  </div>
-                </div>
               </CardContent>
             </Card>
 
