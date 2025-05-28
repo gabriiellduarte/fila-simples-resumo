@@ -32,6 +32,13 @@ const Index = () => {
     queryFn: queueService.getProcedures,
   });
 
+  // Query para buscar tempo médio
+  const { data: averageTime = 0, isLoading: averageTimeLoading } = useQuery({
+    queryKey: ['averageTime'],
+    queryFn: queueService.getAverageTime,
+    refetchInterval: 30000,
+  });
+
   // Filtra atendimentos quando procedure selecionado muda
   useEffect(() => {
     if (selectedProcedure && selectedProcedure !== 'all') {
@@ -209,10 +216,14 @@ const Index = () => {
               <CardContent>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple-600">
-                    45
+                    {averageTimeLoading ? (
+                      <div className="h-8 w-16 bg-purple-200 rounded animate-pulse mx-auto" />
+                    ) : (
+                      averageTime
+                    )}
                   </div>
                   <div className="text-sm text-purple-700 font-medium">
-                    minutos
+                    dias
                   </div>
                   <div className="text-xs text-gray-500 mt-2">
                     Baseado nos últimos atendimentos

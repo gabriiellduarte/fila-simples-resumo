@@ -1,4 +1,3 @@
-
 import { Appointment, ProcedureSummary, APIPatient } from '../types/queue';
 import { API_CONFIG } from '../config/api';
 
@@ -43,11 +42,9 @@ export const queueService = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
-        console.log("resposta ok");
       }
       
       const apiData: APIPatient[] = await response.json();
-      console.log('API Response:', apiData);
       
       const appointments = apiData.map((patient, index) => 
         convertAPIDataToAppointment(patient, index)
@@ -90,6 +87,23 @@ export const queueService = {
     } catch (error) {
       console.error('Erro ao gerar resumo:', error);
       return [];
+    }
+  },
+
+  // Busca o tempo médio de espera
+  async getAverageTime(): Promise<number> {
+    try {
+      const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.averageTime}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.tempo_medio_espera_dias ?? 0;
+    } catch (error) {
+      console.error('Erro ao buscar tempo médio:', error);
+      return 0;
     }
   }
 };
