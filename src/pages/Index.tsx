@@ -139,7 +139,7 @@ const Index = () => {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Mail className="h-4 w-4 text-green-600" />
-                    <span className="text-gray-700">regulacao@aracati.ce.gov.br</span>
+                    <span className="text-gray-700">centralderegulacao@aracati.ce.gov.br</span>
                   </div>
                 </div>
               </div>
